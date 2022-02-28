@@ -1,25 +1,77 @@
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class needMoney {
+    static ArrayList<Node> nodeList = new ArrayList<>();
 
-	public static void main(String[] args) {
-//		새로 생긴 놀이기구는 인기가 매우 많아 줄이 끊이질 않습니다. 이 놀이기구의 원래 이용료는 price원 인데, 놀이기구를 N 번 째 이용한다면 원래 이용료의 N배를 받기로 하였습니다. 
-//		즉, 처음 이용료가 100이었다면 2번째에는 200, 3번째에는 300으로 요금이 인상됩니다.
-//		놀이기구를 count번 타게 되면 현재 자신이 가지고 있는 금액에서 얼마가 모자라는지를 return 하도록 solution 함수를 완성하세요.
-//		단, 금액이 부족하지 않으면 0을 return 하세요.
-				
-		int price = 3;
-		int money = 20;
-		int count = 4;
-		long answer = -1;
-		
-		long sum = 0;   // 내야할 총 금액
-        for(int i = 1; i <= count; i++){
-            sum += price*i;
+	static class Node {
+        int index;
+        Double value;
+        
+        public Node(int i, Double v){
+            this.index = i;
+            this.value = v;
         }
-        answer = sum - money;
-        if(answer < 0){ // 가지고 있는 돈이 더 많은 경우
-            answer = 0;
+        
+    }
+	
+	public static int compareRateThenIndex(Node node1, Node node2) {
+		if(node1.value < node2.value){
+            return 1;
+        }
+        else if(node1.value > node2.value){
+            return -1;
+        }
+        else {
+        	return 0;
         }
 	}
-
+	
+	public static void main(String[] args) {
+		int N = 4;
+		int[] stages = {4, 4, 4, 4,4};
+		int[] answer = new int[N];
+        int[] result = new int[N];
+        
+        ArrayList<Integer> list = new ArrayList<>();
+        ArrayList<Integer> answerList = new ArrayList<>();
+        for(int v : stages){
+            list.add(v);
+        }
+        
+        // 실패율 : 스테이지에 도달했으나 아직 클리어하지 못한 플레이어의 수 / 스테이지에 도달한 플레이어 수
+        for(int i = 1; i < N+1; i++){
+            int challenger = 0; // 해당 라운드에 도전한 사람
+            int passer = 0;     // 해당 라운드에 통과한 사람
+            for(int j = 0; j < list.size(); j++){
+                if(i <= list.get(j)){
+                    challenger++;
+                }
+                if(i < list.get(j)){
+                    passer++;
+                }
+            }
+            Double fail = (double) 0;
+            // 해당 라운드에 도전을 실패한 사람 카운트
+            if(challenger != 0) {
+            	int notPasser = challenger - passer;
+                //실패율
+                fail = ((double)notPasser/(double)challenger)*10;
+            }
+            nodeList.add(new Node(i, fail));
+        }
+        
+        Collections.sort(nodeList, (node1, node2) -> compareRateThenIndex(node1, node2));
+        
+        for(int i = 0; i < nodeList.size(); i++){
+            answer[i] = nodeList.get(i).index;
+        }
+        
+        for (int i = 0; i < answer.length; i++) {
+			System.out.println(answer[i]);
+		}
+        
+	}
+	
+	
 }

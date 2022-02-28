@@ -10,7 +10,7 @@ public class PuppetGame {
         
         for(int i = 0; i < moves.length; i++){
             int dollNum = 0;
-            for(int j = 0; j < board.length; j++){
+            for(int j = 0;	 j < board.length; j++){
                 if(board[j][moves[i]-1] != 0){
                     dollNum = board[j][moves[i]-1];
                     list.add(dollNum);  // 뽑은 인형 번호를 List에 저장
